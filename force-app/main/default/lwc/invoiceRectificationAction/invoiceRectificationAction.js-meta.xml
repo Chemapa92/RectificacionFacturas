@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>60.0</apiVersion>
-    <isExposed>true</isExposed>
-    <targets>
-        <target>lightning__RecordAction</target>
-    </targets>
-    <targetConfigs>
-        <targetConfig targets="lightning__RecordAction">
-            <actionType>Action</actionType>
-        </targetConfig>
-    </targetConfigs>
+  <apiVersion>60.0</apiVersion>
+  <isExposed>true</isExposed>
+  <masterLabel>Rectificar Pedido (Background)</masterLabel>
+  <targets>
+    <target>Lightning__RecordAction</target>
+  </targets>
+  <targetConfigs>
+    <targetConfig targets="Lightning__RecordAction">
+      <actionType>Action</actionType>
+      <objects>
+        <object>Invoice__c</object>
+      </objects>
+    </targetConfig>
+  </targetConfigs>
 </LightningComponentBundle>

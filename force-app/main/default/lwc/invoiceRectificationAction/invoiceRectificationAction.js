@@ -1,24 +1,19 @@
 import { LightningElement, api } from 'lwc';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { NavigationMixin } from 'lightning/navigation';
+import { CloseActionScreenEvent } from 'lightning/actions';
+import createRectifyingOrder from '@salesforce/apex/OrderRectificationController.createRectifyingOrder';
 
-export default class InvoiceRectificationAction extends NavigationMixin(LightningElement) {
-    @api recordId;
-    isLoading = false;
+export default class InvoiceRectificationAction extends LightningElement {
+  @api recordId;
 
-    connectedCallback() {
-        this.startRectification();
-    }
-
-    startRectification() {
-        this.isLoading = true;
-        
-        // Redirigir a la página Visualforce que ya funciona
-        this[NavigationMixin.Navigate]({
-            type: 'standard__webPage',
-            attributes: {
-                url: '/apex/InvoiceRectification?id=' + this.recordId
-            }
-        });
-    }
+  connectedCallback() {
+    // Dispara en segundo plano
+    createRectifyingOrder({ invoiceId: this.recordId })
+      .then(() => {
+        this.dispatchEvent(new CloseActionScreenEvent());
+      })
+      .catch(() => {
+        // Cierra igual; si quieres, añade a futuro un toast silencioso
+        this.dispatchEvent(new CloseActionScreenEvent());
+      });
+  }
 }
