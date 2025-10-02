@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Credential_to_use__c</fullName>
+        <description>A3 credentials to use on WS.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Credenciales seleccionadas para usar en los servicios de A3</inlineHelpText>
+        <label>Credential to use</label>
+        <length>255</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Email_A3__c</fullName>
+        <description>Email to send new clients.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Email del responsable de A3 para enviarle la información del cliente convertido.</inlineHelpText>
+        <label>Email A3</label>
+        <length>255</length>
+        <required>true</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Post_Chatter__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Post errors on WS to Chatter.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Envía a chatter los errores del servicio de envío de pedidos a A3.</inlineHelpText>
+        <label>Post Chatter</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Send_Notifications__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Send CustomNotifications on WS Error</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>Envía a la campana las notificaciones de error en el servicio de envío de pedidos a A3.</inlineHelpText>
+        <label>Send Notifications</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Portal Configuration</label>
+    <pluralLabel>Portal Configurations</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
