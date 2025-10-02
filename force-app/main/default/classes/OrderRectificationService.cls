@@ -20,34 +20,34 @@ public class OrderRectificationService implements Queueable, Database.AllowsCall
 
         // 2) Traer el pedido original y sus líneas
         Order__c original = [
-            SELECT Id, Name, RecordTypeId, Status__c, Account__c, EffectiveDate__c, /* añade tus campos */
-                   (SELECT Id, Product__c, Quantity__c, UnitPrice__c /* añade más campos si aplica */
-                    FROM OrderItems__r)
+            SELECT Id, Name, RecordTypeId, Status__c, Account__c, OrderDate__c, /* añade tus campos */
+                   (SELECT Id, ProductDescription__c, Quantity__c, UnitPrice__c /* añade más campos si aplica */
+                    FROM Lineas_de_pedido__r)
             FROM Order__c
             WHERE Id = :inv.Order__c
             LIMIT 1
         ];
 
-        // 3) Obtener RecordType "Rectificativo"
-        Id rectiRtId = getRecordTypeId('Order__c', 'Rectificativo');
+        // 3) Obtener RecordType "Corrector" (ya existe en el sistema)
+        Id rectiRtId = getRecordTypeId('Order__c', 'Corrector');
 
         // 4) Clonar cabecera (ajusta campos según tu modelo)
         Order__c recti = new Order__c();
         recti.RecordTypeId = rectiRtId;
         recti.Account__c   = original.Account__c;
-        recti.EffectiveDate__c = original.EffectiveDate__c;
+        recti.OrderDate__c = original.OrderDate__c;
         recti.Original_Order__c = original.Id;
-        recti.Status__c = 'Draft'; // o el que aplique en tu modelo
+        recti.Status__c = 'Nuevo'; // estado inicial
         // Copia aquí cualquier otro campo necesario…
 
         insert recti;
 
         // 5) Clonar líneas con cantidad negativa
         List<OrderItem__c> newLines = new List<OrderItem__c>();
-        for (OrderItem__c line : original.OrderItems__r) {
+        for (OrderItem__c line : original.Lineas_de_pedido__r) {
             OrderItem__c nl = new OrderItem__c();
-            nl.Order__c   = recti.Id;
-            nl.Product__c = line.Product__c;
+            nl.Pedido__c   = recti.Id;
+            nl.ProductDescription__c = line.ProductDescription__c;
             nl.UnitPrice__c = line.UnitPrice__c;
             nl.Quantity__c  = (line.Quantity__c == null) ? null : -1 * line.Quantity__c;
             // Copia otros campos necesarios…
