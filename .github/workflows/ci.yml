@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup SF CLI
+        uses: salesforcecli/action-setup@v3
+      - name: Auth Org (with SFDX URL secret)
+        if: env.SFDX_AUTH_URL != ''
+        run: |
+          echo "$SFDX_AUTH_URL" > sfdx.url
+          sf org login sfdx-url --sfdx-url-file sfdx.url --alias ciOrg --set-default
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+      - name: Validate (skipped if no auth)
+        if: env.SFDX_AUTH_URL != ''
+        run: |
+          sf project deploy validate --target-org ciOrg --test-level RunLocalTests --ignore-warnings
+
