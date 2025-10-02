@@ -4,10 +4,10 @@
   <isExposed>true</isExposed>
   <masterLabel>Rectificar Pedido (Background)</masterLabel>
   <targets>
-    <target>Lightning__RecordAction</target>
+    <target>lightning__RecordAction</target>
   </targets>
   <targetConfigs>
-    <targetConfig targets="Lightning__RecordAction">
+    <targetConfig targets="lightning__RecordAction">
       <actionType>Action</actionType>
       <objects>
         <object>Invoice__c</object>
