@@ -28,15 +28,14 @@ public class OrderRectificationService implements Queueable, Database.AllowsCall
             LIMIT 1
         ];
 
-        // 3) Obtener RecordType "Corrector" (ya existe en el sistema)
-        Id rectiRtId = getRecordTypeId('Order__c', 'Corrector');
+        // 3) Obtener RecordType "Rectificativo"
+        Id rectiRtId = getRecordTypeId('Order__c', 'Rectificativo');
 
         // 4) Clonar cabecera (ajusta campos según tu modelo)
         Order__c recti = new Order__c();
         recti.RecordTypeId = rectiRtId;
         recti.Account__c   = original.Account__c;
         recti.OrderDate__c = original.OrderDate__c;
-        recti.Original_Order__c = original.Id;
         recti.Status__c = 'Nuevo'; // estado inicial
         // Copia aquí cualquier otro campo necesario…
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+  <fullName>Rectificativo</fullName>
+  <active>true</active>
+  <description>Pedidos de rectificación con cantidades negativas</description>
+  <label>Rectificativo</label>
+  <recordTypeVisibilities>
+    <default>true</default>
+    <personAccountDefault>false</personAccountDefault>
+    <profile>Admin</profile>
+    <recordType>Rectificativo</recordType>
+    <visible>true</visible>
+  </recordTypeVisibilities>
+</RecordType>

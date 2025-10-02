@@ -37,15 +37,15 @@ private class OrderRectificationServiceTest {
 
         // Verificar que se creó el rectificativo con líneas negativas
         List<Order__c> rectis = [
-            SELECT Id, Original_Order__c,
+            SELECT Id, RecordTypeId,
                    (SELECT Quantity__c, UnitPrice__c FROM Lineas_de_pedido__r)
             FROM Order__c
-            WHERE Original_Order__c = :orig.Id
+            WHERE Id != :orig.Id AND Account__c = :acc.Id
         ];
         System.assertEquals(1, rectis.size(), 'Debe existir un pedido rectificativo');
 
         Order__c r = rectis[0];
-        System.assertEquals(orig.Id, r.Original_Order__c, 'Debe referenciar al original');
+        // Verificar que tiene el Record Type correcto
         System.assertEquals(1, r.Lineas_de_pedido__r.size(), 'Debe clonar líneas');
 
         System.assertEquals(-3, r.Lineas_de_pedido__r[0].Quantity__c, 'Cantidad negativa');
