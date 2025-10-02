@@ -1,0 +1,18 @@
+<apex:page controller="OrderCloneController" action="{!cloneOrder}">
+    <apex:pageMessages />
+    
+    <div style="text-align: center; padding: 50px;">
+        <h2>Clonando Pedido...</h2>
+        <p>Por favor espere mientras se procesa la solicitud.</p>
+        
+        <apex:outputText rendered="{!NOT(ISBLANK(errorMessage))}" style="color: red; font-weight: bold;">
+            <br/><br/>
+            Error: {!errorMessage}
+        </apex:outputText>
+        
+        <apex:outputText rendered="{!NOT(ISBLANK(loadingMessage))}">
+            <br/><br/>
+            {!loadingMessage}
+        </apex:outputText>
+    </div>
+</apex:page>

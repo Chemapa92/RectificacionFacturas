@@ -1,0 +1,800 @@
+<apex:page standardcontroller="Invoice__c" applyBodyTag="false" contentType="application/x-pdf#Document.pdf">
+
+    <head>
+        <style type="text/css">
+            @page {
+                size: A4 portrait;
+                margin-top: 15px;
+                margin-bottom: 5px;
+            }
+            .energia {
+                font-family: sans-serif;
+                font-size: 13px;
+            }
+            .energia .invoice-header{
+                text-align: center;
+                font-size: 13px;
+            }
+            .energia .float-L{
+                float: left;
+            }
+            .energia .float-R{
+                float: right;
+            }
+            .energia .invoice-body{
+                position: absolute;
+                width: 100%;
+                top: 120px;
+            }
+            .energia .paginator-separator{
+                height: 1px;
+                margin-top: 20px;
+                border: solid 1px black;
+            }
+            .energia .invoice-body-info{
+                margin-top: 25px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                width: 97.8%;
+                border: solid 1px black;
+            }
+            .energia .invoice-body-info div{
+                margin-top: 10px;
+                display: inline-block;
+                width: 49%;
+            }
+            .energia .invoice-store-info{
+                margin-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border: solid 1px black;
+            }
+            .energia .invoice-store-info td{
+                margin-top: 10px;
+                width: 49%;
+            }
+            .energia .invoice-store-info span{
+                width: 50%;
+                display: inline-block;
+            }
+            .energia .invoice-product-info{
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .energia .invoice-product-info th, .energia .invoice-product-info td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .energia .border-right-none {
+                border-right: none !important;
+            }
+            .energia .border-left-none {
+                border-left: none !important;
+            }
+            .energia .underline{
+                border-bottom: 2px solid black;
+            }
+            .energia .invoice-total{
+                position: absolute;
+                width: 100%;
+                top: 700px;
+            }
+            .energia .invoice-total table{
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border-collapse: collapse;
+                border: solid 1px black;
+            }
+            .energia .invoice-total table th, .energia .invoice-total table td{
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .energia .invoice-total .energia .invoice-first-table td{
+                vertical-align: top;
+                height: 60px;
+            }
+            .energia .invoice-total .energia .invoice-first-table th{
+                background-color: #c6c6c6;
+            }
+            .energia .cell-10{
+                width: 10% !important;
+            }
+            .energia .cell-14{
+                width: 14% !important;
+            }
+            .energia .cell-6{
+                width: 6% !important;
+            }
+            .energia .cell-none{
+                border: none !important;
+            }
+            .energia .padding-right{
+                padding-right: 5px;
+            }
+            .energia .padding-left{
+                padding-left: 5px;
+            }
+            .energia .padding-right-big{
+                padding-right: 35px;
+            }
+            .energia .invoice-payment-info{
+                width: 97.8%;
+                margin-top: 50px;
+                padding-top: 10px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                border: solid 1px black;
+            }
+            .energia .bank-options{
+                padding-top: 10px;
+                padding-left: 100px;
+                padding-bottom: 15px;
+                line-height: 1.6;
+                font-size: 10px;
+            }
+            .energia .invoice-footer-info{
+                font-size: 9.5px;
+                margin-bottom: 0px;
+                padding-bottom: 0px;
+            }
+            .energia .invoice-last-footer{
+                margin-top: 0px;
+                padding-top: 0px;
+                font-size: 11px;
+            }
+
+
+            .distribucion {
+                font-family: sans-serif;
+                font-size: 13px;
+            }
+            .distribucion .invoice-header{
+                font-size: 16px;
+            }
+            .distribucion .float-L{
+                float: left;
+            }
+            .distribucion .float-R{
+                float: right;
+            }
+            .distribucion .invoice-body{
+                position: absolute;
+                width: 100%;
+                top: 120px;
+            }
+            .distribucion .paginator-separator{
+                height: 1px;
+                margin-top: 20px;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-body-info{
+                margin-top: 25px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                width: 97.8%;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-body-info div{
+                margin-top: 10px;
+                display: inline-block;
+                width: 49%;
+            }
+            .distribucion .invoice-store-info{
+                margin-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-store-info td{
+                margin-top: 10px;
+                width: 49%;
+            }
+            .distribucion .invoice-store-info span{
+                width: 50%;
+                display: inline-block;
+            }
+            .distribucion .invoice-product-info{
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .distribucion .invoice-product-info th, .distribucion .invoice-product-info td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .distribucion .border-right-none {
+                border-right: none !important;
+            }
+            .distribucion .border-left-none {
+                border-left: none !important;
+            }
+            .distribucion .underline{
+                border-bottom: 2px solid black;
+            }
+            .distribucion .invoice-total{
+                position: absolute;
+                width: 100%;
+                top: 700px;
+            }
+            .distribucion .invoice-total table{
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 100%;
+                border-collapse: collapse;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-total table th, .distribucion .invoice-total table td{
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-total .invoice-first-table td{
+                vertical-align: top;
+                height: 60px;
+            }
+            .distribucion .invoice-total .invoice-first-table th{
+                background-color: #c6c6c6;
+            }
+            .distribucion .cell-10{
+                width: 10% !important;
+            }
+            .distribucion .cell-14{
+                width: 14% !important;
+            }
+            .distribucion .cell-6{
+                width: 6% !important;
+            }
+            .distribucion .cell-none{
+                border: none !important;
+            }
+            .distribucion .padding-right{
+                padding-right: 5px;
+            }
+            .distribucion .padding-left{
+                padding-left: 5px;
+            }
+            .distribucion .invoice-payment-info{
+                width: 97.8%;
+                margin-top: 50px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                border: solid 1px black;
+            }
+            .distribucion .bank-options{
+                text-align: center;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                line-height: 1.6;
+            }
+        </style>
+    </head>
+
+    <!-- ENERGIA -->
+    <apex:outputPanel rendered="{!Invoice__c.Type__c == 'ENERGÍA'}">
+        <body class="energia">
+            <!--HEADER-->
+            <div class="invoice-header">
+                <div class="float-L">
+                    <img id="theImage0" src="{!URLFOR($Resource.HafesaLogo)}" width="90" height="100"/>
+                </div>
+                <div class="float-R padding-right-big">
+                    <div><b><i>HAFESA ENERGIA S.L.U.</i></b></div>
+                    <div><b><i>Paseo de la Castellana, NUM 114</i></b></div>
+                    <div><b><i>Piso 4º puerta 8</i></b></div>
+                    <div><b><i>(28046) Madrid- Madrid</i></b></div>
+                    <div><b><i>Tel.: 91 783 94 10 - Fax: 91 783 94 1</i></b></div>
+                </div>
+            </div>
+
+
+            <!--MIDDLE-->
+            <div class="invoice-body">
+
+                <!--PAGINATOR-->
+                <div class="invoice-body-paginator">
+                    <span class="paginator-name float-L">
+                        <b>Factura</b>
+                    </span>
+                    <span class="paginator-number float-R padding-right">
+                        <b>Pág.</b>      1
+                    </span>
+                </div>
+                <div class="paginator-separator"></div>
+
+                <!--INVOICE INFO-->
+                <div class="invoice-body-info">
+                    <div>
+                        <b class="underline">Número de Factura:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.Name}
+                    </div>
+                    <div>
+                        <b class="underline">Fecha</b> 
+                        <apex:outputText value="{0, date, dd/MM/yyyy}">
+                            <apex:param value="{!Invoice__c.IssueDate__c}" /> 
+                        </apex:outputText>
+                    </div>
+                    <div>
+                        <b class="underline">Dirección Entrega:</b>
+                    </div>
+                    <div>
+                        <b class="underline">Razón Social</b>
+                    </div>
+                    <div>
+                        <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.DeliveryAddress__c}"></apex:outputText>
+                    </div>
+                    <div>
+                        <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.BusinessName__c}"></apex:outputText>
+                    </div>
+                    <div>
+                        <b class="underline">Cod. Cliente:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.AccountCode__c}
+                    </div>
+                    <div>
+                        <b class="underline">CIF/NIF:</b> {!Invoice__c.CIF__c}
+                    </div>
+                </div>
+
+                <!--STORE-->
+                <table class="invoice-store-info">
+                    <tr>
+                        <td rowspan="2">
+                            <b class="underline">Almacén de Carga:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.Store__c}
+                        </td>
+                        <td>
+                            <span><b class="underline">Orden de Carga:</b></span><span>{!Invoice__c.FreightOder__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span><b class="underline">Albarán del Proveedor:</b></span><span>{!Invoice__c.SupplierDeliveryNote__c}</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!--PRODUCTS-->
+                <table class="invoice-product-info">
+                    <tr>
+                        <th class="border-right-none">
+                            <span class="float-L padding-left">
+                                Fecha
+                            </span>                 
+                        </th>
+                        <th class="border-left-none">
+                            <span class="float-L padding-left">
+                                Descrip
+                            </span>
+                        </th>
+                        <th>
+                            Cantidad(l)
+                        </th>
+                        <th>
+                            Precio(EUR/l)
+                        </th>
+                        <th>
+                            Importe
+                        </th>
+                    </tr>
+                    <apex:repeat value="{!Invoice__c.InvoiceItem__r}" var="line" id="theRepeat0">
+                        <tr>
+                            <td class="border-right-none">
+                                <span class="float-L padding-left">
+                                    <apex:outputText value="{0,date,dd/MM/yyyy HH:mm:ss}">
+                                        <apex:param value="{!line.Date__c}" />
+                                    </apex:outputText>
+                                </span>
+                            </td>
+                            <td class="border-left-none">
+                                <span class="float-L padding-left">
+                                    {!line.Descrip__c}
+                                </span>
+                            </td>
+                            <td>
+                                {!line.Quantity__c}
+                            </td>
+                            <td>
+                                <apex:outputField value="{!line.Price__c}"/> 
+                            </td>
+                            <td>
+                                <apex:outputField value="{!line.Amount__c}"/> 
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+
+            </div>
+
+            <!--TOTAL-->
+            <div class="invoice-total">
+
+                <table class="invoice-first-table">
+                    <tr>
+                        <th>
+                            Base imponible
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            IVA
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            R.equiv
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            IRPF
+                        </th>
+                        <th>
+                            <span class="float-R padding-right">
+                                Total factura 
+                            </span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.TaxBase__c}"/>
+                            </span>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentIVA__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.IVA__c}"/>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentRequiv__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.Requiv__c}"/>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentIRPF__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.IRPF__c}"/>
+                        </td>
+                        <td>
+                            <span class="float-R padding-right">
+                                <b><apex:outputField value="{!Invoice__c.TotalAmount__c}"/></b>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.TaxBase__c}"/>
+                            </span>
+                        </td>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.IVA__c}"/>
+                            </span>
+                        </td>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                {!Invoice__c.Requiv__c} €
+                            </span>
+                        </td>
+                        <td class="cell-none">
+                        </td>
+                        <td class="cell-none">
+                        </td>
+                    </tr>
+                </table>
+
+                <!--PAYMENT INFO-->
+                <div class="invoice-payment-info">
+                    <div>
+                        <b>Forma de pago:</b> {!Invoice__c.PaymentMethod__c}
+                    </div>
+                    <div class="bank-options">
+                        <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.BankAccount__c}"></apex:outputText>
+                    </div>
+                </div>
+
+                <!--FOOTER INFO-->
+                <div class="invoice-footer">
+                    <div class="invoice-footer-info">
+                        De acuerdo con lo establecido en la Ley Orgánica 15/1999 de Protección de Datos de Carácter Personal, procedemos a inf ormarles que los datos<br/>
+                        personales que UD/s nos f acilite, serán tratados de f orma mixta en nuestros f icheros con la f inalidad de llev ar a cabo la gestión interna del cliente. Todos o<br/>
+                        parte de los datos aportados serán comunicados a las administraciones públicas competentes. El titular consiente al env ío de comunicaciones comerciales<br/>
+                        de nuestros serv icios tanto por correo electrónico como ordinario; en cualquier momento el interesado podrá oponerse a dicho consentimiento<br/>
+                        manif estándolo por escrito. Asimismo, el titular de los datos se compromete a comunicar por escrito a HAFESA ENERGIA, SLU cualquier modif icación que se<br/>
+                        produzca<br/>
+                        en los datos aportados. Los interesados podrán ejercitar sus derechos de acceso, rectif icación, cancelación y oposición reconocidos en la LOPD,<br/>
+                        dirigiéndose a HAFESA ENERGIA, SLU en la siguiente dirección: Paseo de la Castellana Nº 259D Planta31<br/>
+                    </div>
+                    <div class="invoice-last-footer">
+                        <b>HAFESA ENERGIA S.L.U. · CIF: B-18213173 · Registro Mercantil de Granada, Tomo 451, Folio 146, Hoja GR-2716, Inscripcion 10ª</b>
+                    </div>
+                </div>
+            </div>
+
+        </body>
+    </apex:outputPanel>
+
+    <!-- DISTRIBUCION -->
+    <apex:outputPanel rendered="{!Invoice__c.Type__c == 'DISTRIBUCIÓN'}">
+        <body class="distribucion">
+            <!--HEADER-->
+            <div class="invoice-header">
+                <div class="float-L">
+                    <img id="theImage1" src="{!URLFOR($Resource.HafesaLogo)}" width="90" height="100"/>
+                </div>
+                <div class="float-R">
+                    <div><b>Hafesa Distribución De Hidrocarburos S.L.</b></div>
+                    <div><b>CL PUNTA SOLLANA,0</b></div>
+                    <div><b>48508 ZIERBENA</b></div>
+                    <div><b>BIZKAIA</b></div>
+                    <div><b>CIF/NIF: B87679882</b></div>
+                </div>
+            </div>
+    
+    
+            <!--MIDDLE-->
+            <div class="invoice-body">
+    
+                <!--PAGINATOR-->
+                <div class="invoice-body-paginator">
+                    <span class="paginator-name float-L">
+                        <b>Factura</b>
+                    </span>
+                    <span class="paginator-number float-R padding-right">
+                        <b>Pág.</b>      1
+                    </span>
+                </div>
+                <div class="paginator-separator"></div>
+    
+                <!--INVOICE INFO-->
+                <div class="invoice-body-info">
+                    <div>
+                        <b class="underline">Número de Factura:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.Name}
+                    </div>
+                    <div>
+                        <b class="underline">Fecha</b> 
+                        <apex:outputText value="{0, date, dd/MM/yyyy}">
+                            <apex:param value="{!Invoice__c.IssueDate__c}" /> 
+                        </apex:outputText>
+                    </div>
+                    <div>
+                        <b class="underline">Dirección Entrega:</b>
+                    </div>
+                    <div>
+                        <b class="underline">Razón Social</b>
+                    </div>
+                    <div>
+                        <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.DeliveryAddress__c}"></apex:outputText>
+                    </div>
+                    <div>
+                        <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.BusinessName__c}"></apex:outputText>
+                    </div>
+                    <div>
+                        <b class="underline">Cod. Cliente:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.AccountCode__c}
+                    </div>
+                    <div>
+                        <b class="underline">CIF/NIF:</b> {!Invoice__c.CIF__c}
+                    </div>
+                </div>
+    
+                <!--STORE-->
+                <table class="invoice-store-info">
+                    <tr>
+                        <td rowspan="2">
+                            <b class="underline">Almacén de Carga:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Invoice__c.Store__c}
+                        </td>
+                        <td>
+                            <span><b class="underline">Orden de Carga:</b></span><span>{!Invoice__c.FreightOder__c}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span><b class="underline">Albarán del Proveedor:</b></span><span>{!Invoice__c.SupplierDeliveryNote__c}</span>
+                        </td>
+                    </tr>
+                </table>
+    
+                <!--PRODUCTS-->
+                <table class="invoice-product-info">
+                    <tr>
+                        <th class="border-right-none">
+                            <span class="float-L padding-left">
+                                Fecha
+                            </span>                 
+                        </th>
+                        <th class="border-left-none">
+                            <span class="float-L padding-left">
+                                Descrip
+                            </span>
+                        </th>
+                        <th>
+                            Cantidad(l)
+                        </th>
+                        <th>
+                            Precio(EUR/l)
+                        </th>
+                        <th>
+                            Importe
+                        </th>
+                    </tr>
+                    <apex:repeat value="{!Invoice__c.InvoiceItem__r}" var="line" id="theRepeat1">
+                        <tr>
+                            <td class="border-right-none">
+                                <span class="float-L padding-left">
+                                    <apex:outputText value="{0,date,dd/MM/yyyy HH:mm:ss}">
+                                        <apex:param value="{!line.Date__c}" />
+                                    </apex:outputText>
+                                </span>
+                            </td>
+                            <td class="border-left-none">
+                                <span class="float-L padding-left">
+                                    {!line.Descrip__c}
+                                </span>
+                            </td>
+                            <td>
+                                {!line.Quantity__c}
+                            </td>
+                            <td>
+                                <apex:outputField value="{!line.Price__c}"/>
+                            </td>
+                            <td>
+                                <apex:outputField value="{!line.Amount__c}"/>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+    
+            </div>
+    
+            <!--TOTAL-->
+            <div class="invoice-total">
+    
+                <table class="invoice-first-table">
+                    <tr>
+                        <th>
+                            Base imponible
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            IVA
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            R.equiv
+                        </th>
+                        <th class="border-right-none cell-10">
+                            %
+                        </th>
+                        <th class="border-left-none cell-10">
+                            IRPF
+                        </th>
+                        <th>
+                            <span class="float-R padding-right">
+                                Total factura 
+                            </span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.TaxBase__c}"/>
+                            </span>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentIVA__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.IVA__c}"/>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentRequiv__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.Requiv__c}"/>
+                        </td>
+                        <td class="border-right-none cell-10">
+                            {!Invoice__c.PercentIRPF__c}
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputField value="{!Invoice__c.IRPF__c}"/>
+                        </td>
+                        <td>
+                            <span class="float-R padding-right">
+                                <b><apex:outputField value="{!Invoice__c.TotalAmount__c}"/></b>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.TaxBase__c}"/>
+                            </span>
+                        </td>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.IVA__c}"/>
+                            </span>
+                        </td>
+                        <td class="cell-6 border-right-none">
+                            <span class="float-L padding-left">
+                                <b>Total:</b>
+                            </span>
+                        </td>
+                        <td class="cell-14 border-left-none">
+                            <span class="float-R padding-right">
+                                <apex:outputField value="{!Invoice__c.Requiv__c}"/>
+                            </span>
+                        </td>
+                        <td class="cell-none">
+                        </td>
+                        <td class="cell-none">
+                        </td>
+                    </tr>
+                </table>
+    
+                <!--PAYMENT INFO-->
+                <div class="invoice-payment-info">
+                    <div>
+                        <b>Forma de pago:</b> {!Invoice__c.PaymentMethod__c}
+                    </div>
+                    <div class="bank-options">
+                        <b>
+                            <apex:outputText style="white-space:pre-wrap;" escape="false" value="{!Invoice__c.BankAccount__c}"></apex:outputText>
+                        </b>
+                    </div>
+                </div>
+            </div>
+    
+        </body>
+    </apex:outputPanel>
+</apex:page>

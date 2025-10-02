@@ -1,0 +1,35 @@
+<template>
+    <template if:true={mostrarEmailPanel}>
+        <template if:true={recordId}>
+            <c-send-custom-email-proforma
+                record-id={recordId}
+                is-quick-action={isQuickAction}
+                oncloseemailpanel={handleCloseEmailPanel}>
+            </c-send-custom-email-proforma>
+        </template>
+        <template if:false={recordId}>
+            <div class="slds-text-color_error slds-text-heading_small">
+                No se ha proporcionado un recordId válido.
+            </div>
+        </template>
+    </template>
+
+    <template if:false={mostrarEmailPanel}>
+        <div class="slds-text-align_center" style="min-height: 100px; margin-top: 20px;">
+            <lightning-icon icon-name="utility:success" variant="success" size="large" class="slds-m-bottom_small"></lightning-icon>
+            <div class="slds-text-heading_medium slds-text-color_success">
+                ¡CORREO ENVIADO CON ÉXITO!
+            </div>
+        </div>
+        <!-- <div class="slds-align_absolute-center slds-text-heading_medium slds-text-color_success" style="min-height: 100px;">
+            ¡CORREO ENVIADO CON ÉXITO!
+        </div> -->
+        <div class="slds-m-top_medium">
+            <lightning-button
+                label="Volver"
+                icon-name="utility:back"
+                onclick={handleGoBack}>
+            </lightning-button>
+        </div>
+    </template>
+</template>

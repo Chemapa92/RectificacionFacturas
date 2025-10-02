@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-p-around_medium">
+        <div class="slds-text-align_center">
+            <lightning-icon icon-name="utility:copy" size="large" class="slds-m-bottom_small"></lightning-icon>
+            <h2 class="slds-text-heading_medium slds-m-bottom_medium">Clonar Pedido</h2>
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                ¿Está seguro de que desea clonar este pedido incluyendo todas sus líneas de pedido?
+            </p>
+            
+            <lightning-button
+                variant="brand"
+                label="Clonar Pedido"
+                onclick={handleCloneClick}
+                disabled={isLoading}
+                class="slds-button_full slds-m-bottom_medium">
+            </lightning-button>
+
+            <template if:true={isLoading}>
+                <div class="slds-is-relative">
+                    <lightning-spinner alternative-text="Procesando..." size="small"></lightning-spinner>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

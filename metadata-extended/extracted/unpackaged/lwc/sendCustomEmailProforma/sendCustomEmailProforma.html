@@ -1,0 +1,69 @@
+<template>
+    <!-- <template if:true={showPanel}>
+
+  <template if:false={emailSent}> -->
+    <div class="slds-p-around_medium">
+      <h2 class="slds-text-heading_medium slds-m-bottom_medium">Enviar Email Proforma</h2>
+
+      <!-- Spinner de carga -->
+      <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Cargando..." size="medium"></lightning-spinner>
+      </template>
+  
+      <!-- Formulario principal -->
+      <lightning-input label="Para (separado por ';')" value={toAddress} onchange={handleToChange}></lightning-input>
+      <lightning-input label="CC (separado por ';')" value={ccAddressesString} onchange={handleCcChange}></lightning-input>
+      <lightning-input label="Asunto" value={subject} onchange={handleSubjectChange}></lightning-input>
+      <lightning-input-rich-text label="Mensaje" value={body} onchange={handleBodyChange}></lightning-input-rich-text>
+  
+      <!-- Subida de archivos -->
+      <lightning-file-upload label="Adjuntar archivos" name="fileUploader" record-id={recordId} onuploadfinished={handleUploadFinished} multiple></lightning-file-upload>            
+  
+      <!-- Adjuntos -->
+      <template if:true={pdfList}>
+        <div class="slds-m-top_medium">
+          <template for:each={pdfList} for:item="file">
+            <div key={file.versionId} class="slds-m-bottom_small slds-grid slds-grid_align-spread">
+              <div class="slds-truncate slds-text-link" onclick={handlePreviewClick} data-document-id={file.documentId}>
+                <lightning-icon icon-name="utility:preview" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                {file.title}
+              </div>
+              <button class="slds-button slds-button_icon slds-button_icon-border" 
+                      title="Eliminar"
+                      data-version-id={file.versionId} 
+                      onclick={removeAttachment}>
+                <lightning-icon icon-name="utility:delete" alternative-text="Eliminar" size="xx-small"></lightning-icon>
+              </button>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Botones -->
+        <div class="slds-m-top_medium slds-text-align_right">
+          <lightning-button variant="brand" label="Enviar" onclick={sendEmail} disabled={isLoading}></lightning-button>
+        </div>
+    </div>
+</template>
+
+    <!-- Mensaje de éxito -->
+    <!-- <template if:true={emailSent}>
+    <div class="slds-align_absolute-center slds-text-align_center" style="min-height: 200px;">
+      <div>
+        <lightning-icon icon-name="utility:success" variant="success" size="large" class="slds-m-bottom_medium"></lightning-icon>
+        <div class="slds-text-heading_medium slds-m-bottom_medium">
+          Correo enviado correctamente.
+        </div>
+        <div class="slds-m-top_medium">
+          <lightning-button label="Cerrar panel" variant="destructive" onclick={handleClosePanel}></lightning-button>
+        </div>
+      </div>
+    </div>
+  </template>
+  
+     </template>
+
+  <template if:false={showPanel}>
+    <div class="slds-text-heading_medium">Panel cerrado.</div>
+  </template> -->
+  <!-- </template> -->

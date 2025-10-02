@@ -1,0 +1,29 @@
+<template>
+    <div class="exampleHolder" if:true={renderSpinner} style="height: 102px;">
+
+        <div class="demo-only  " style="height:6rem;position:relative">
+            <div class="">
+                <div class="slds-icon-eq slds-is-animated" style="
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            ">
+                    <p>Subiendo los cambios a A3, porfavor espere
+                    </p>
+                    <div class="slds-icon-eq__bar" style="position:relative;    margin-left: 6px;
+                    margin-right: -4px; margin-top: 11px;"></div>
+                    <div class="slds-icon-eq__bar" style="position:relative; margin-right: -4px;margin-top: 11px; ">
+                    </div>
+                    <div class="slds-icon-eq__bar" style="position:relative;margin-top: 11px;"></div>
+                    <span class="slds-assistive-text">Text alternative when needed</span>
+                </div>
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

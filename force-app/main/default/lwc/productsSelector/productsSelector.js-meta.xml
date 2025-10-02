@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="urn:metadata.tooling.soap.sforce.com" fqn="productsSelector">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Product Selector</masterLabel>
+    <description>Product Selector</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="selAccountStore" type="String" label="Selected Store" description="Name of the store"/>
+            <property name="preSelectedRows" type="String[]" label="Selected Rows" description="Ids from pricebookentries of selected products"/>
+            <property name = "fromLWC" label= "from lwc"  type = "Boolean"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

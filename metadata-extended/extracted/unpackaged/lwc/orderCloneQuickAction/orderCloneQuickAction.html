@@ -1,0 +1,60 @@
+<template>
+    <lightning-quick-action-panel header="Clonar Pedido">
+        <div class="slds-p-around_medium">
+            <!-- Mensaje informativo -->
+            <div class="slds-notify slds-notify_alert slds-theme_info slds-m-bottom_medium">
+                <span class="slds-assistive-text">Información</span>
+                <span class="slds-icon_container slds-icon-utility-info slds-m-right_x-small">
+                    <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                </span>
+                <p>Esta acción creará una copia de este pedido con todas sus líneas. El nuevo pedido tendrá estado "Borrador" y fecha de hoy.</p>
+            </div>
+
+            <!-- Spinner de carga -->
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-p-vertical_medium">
+                    <lightning-spinner alternative-text="Clonando pedido..." size="medium"></lightning-spinner>
+                    <p class="slds-text-align_center slds-m-top_small">Clonando pedido y líneas...</p>
+                </div>
+            </template>
+
+            <!-- Botones de acción -->
+            <template if:false={isLoading}>
+                <div class="slds-grid slds-gutters slds-m-top_medium">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-button 
+                            variant="brand" 
+                            label="Clonar Pedido" 
+                            title="Clonar Pedido"
+                            onclick={handleCloneClick}
+                            class="slds-button_stretch">
+                        </lightning-button>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Cancelar" 
+                            title="Cancelar"
+                            onclick={handleCancelClick}
+                            class="slds-button_stretch">
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Información adicional -->
+            <div class="slds-m-top_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">¿Qué se clonará?</h3>
+                <ul class="slds-list_dotted">
+                    <li class="slds-item">Información básica del pedido (cuenta, pricebook, etc.)</li>
+                    <li class="slds-item">Todas las líneas de pedido con cantidades y precios</li>
+                    <li class="slds-item">Direcciones de envío y facturación</li>
+                    <li class="slds-item">Divisa (si está habilitada)</li>
+                </ul>
+                <p class="slds-text-body_small slds-m-top_small slds-text-color_weak">
+                    <strong>Nota:</strong> El nuevo pedido se creará con estado "Borrador" y fecha de hoy.
+                </p>
+            </div>
+        </div>
+    </lightning-quick-action-panel>
+</template>

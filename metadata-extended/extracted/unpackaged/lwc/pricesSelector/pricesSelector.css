@@ -1,0 +1,15 @@
+table td:nth-child(1){ 
+	display:none !important; 
+} 
+
+table th:nth-child(1){ 
+	display:none !important;
+}
+
+.error-text{
+	color: var(--lwc-colorTextError, #c23934);
+}
+
+.right{
+	float: right;
+}

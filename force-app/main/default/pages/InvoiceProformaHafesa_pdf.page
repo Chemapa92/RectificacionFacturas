@@ -1,0 +1,845 @@
+<apex:page standardcontroller="Opportunity" applyBodyTag="false" contentType="application/x-pdf#Document.pdf" renderAs="pdf" extensions="InvoiceProformaControllerExtension" showHeader="false" standardStylesheets="true">
+<apex:variable var="contador" value="{!0}" />
+<apex:variable var="contador2" value="{!0}" />
+
+    <head>
+        <style type="text/css">
+            @page {
+                size: A4 portrait;
+                margin-top: 15mm;
+                margin-bottom: 15mm;
+                @bottom-center {
+                    content: "Pág." counter(page) "/" counter(pages);       
+                    font-size: 8pt;             
+                    text-align: center;
+                }
+            }
+
+            @media print {
+                body {
+                    font-family: sans-serif;
+                    font-size: 13px;
+                    box-sizing: border-box;
+                }
+            }
+
+            .pageNumber:before {
+                content: "Pág. " counter(page) "/" counter(pages);
+            }
+
+            .text-left {
+                text-align: left;
+            }
+            .text-right {
+                text-align: right;
+            }
+            .energia {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .energia .invoice-header {
+                text-align: center;
+                font-size: 13px;
+                flex-grow: 0;
+            }
+            .energia .float-L {
+                float: left;
+            }
+            .energia .float-R {     
+                float: right;
+            }
+
+            /* table {
+                -fs-table-paginate: paginate;
+            } */
+
+            .energia .invoice-body {
+                /* position: relative; */
+                flex-grow: 1;
+                width: 100%;
+                /* top: 120px; */
+                margin-top: 120px;
+                margin-bottom: 20px;
+            }
+             
+            /* .energia .invoice-body {
+                position: absolute;
+                width: 100%;
+                top: 120px;
+            } */
+            .energia .paginator-separator {
+                height: 1px;
+                margin-top: 20px;
+                border: solid 1px black;
+            }
+            .energia .invoice-body-info {
+                border: 2px solid black;
+                margin-top: 25px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                width: 97.8%;
+                border: solid 1px black;
+            }
+            .energia .invoice-body-info div {
+                margin-top: 10px;
+                display: inline-block;
+                width: 49%;
+            }
+            .energia .invoice-product-info {
+            	margin-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 0%;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .energia .invoice-product-info th {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .energia .invoice-product-info td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+            }
+            .energia .invoice-product-info > tr {
+                background-color: white;
+                border: none;
+            }
+            .energia .invoice-product-info > tr:nth-child(even) {
+                background-color: #e1ffc1;
+                border: none;
+            }
+            .energia .border-right-none {
+                border-right: none !important;
+            }
+            .energia .border-left-none {
+                border-left: none !important;
+            }
+            .energia .underline {
+                border-bottom: 2px solid black;
+            }
+            .energia .invoice-total {
+                width: 100%;
+                align-self: flex-end;
+            }
+            /* .energia .invoice-total {
+            	position: relative;
+                bottom: 0;
+            	top: 800px;
+                width: 100%;
+                page-break-before: always;
+            } */
+
+            .energia .invoice-total table {
+            	margin-left: auto;
+            	margin-right: 0;
+            	margin-bottom: 5px;
+                /* padding-bottom: 5px; */
+                padding-left: 2%;
+                width: 80%;
+                border-collapse: collapse;
+            }
+            .energia .invoice-total table th, .energia .invoice-total table td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .energia .invoice-total .invoice-first-table th {
+                background-color: #c6c6c6;
+            }
+            .energia .cell-10 {
+                width: 10% !important;
+            }
+            .energia .cell-14 {
+                width: 14% !important;
+            }
+            .energia .cell-8 {
+                width: 8% !important;
+            }
+            .energia .cell-none {
+                border: none !important;
+            }
+            .energia .padding-right {
+                padding-right: 5px;
+            }
+            .energia .padding-left {
+                padding-left: 5px;
+            }
+            .energia .padding-right-big {
+                padding-right: 35px;
+            }
+            .energia .invoice-payment-legal-text {
+                position: relative;
+                padding-top: 60px;
+                height: 20px;
+            }
+            .energia .invoice-payment-info-title {
+                background-color: #cccccc;
+                border: solid 1px black;
+                margin-bottom: 5px;
+                padding: 5px;
+                padding-left: 10px;
+                font-weight: 700;
+            }
+            .energia .invoice-payment-info {
+                display: flex;
+                width: 97.8%;
+                margin-top: 5px;
+                padding: 10px 3px 10px 10px;
+                border: solid 1px black;
+            }
+            .energia .bank-options {
+                padding-top: 10px;
+                padding-left: 100px;
+                padding-bottom: 15px;
+                line-height: 1.6;
+                font-size: 12px;
+            }
+            .energia .invoice-footer-info {
+                font-size: 9.5px;
+                margin-top: 10px;
+                margin-bottom: 0px;
+                padding-bottom: 0px;
+            }
+            .energia .invoice-last-footer {
+                margin-top: 10px;
+                padding-top: 0px;
+                font-size: 11px;
+            }
+            .distribucion {
+                font-family: sans-serif;
+                font-size: 13px;
+            }
+            .distribucion .invoice-header {
+                font-size: 16px;
+            }
+            .distribucion .float-L {
+                float: left;
+            }
+            .distribucion .float-R {
+                float: right;
+            }
+
+            .distribucion .invoice-body {
+                /* position: relative; */
+                flex-grow: 1;
+                width: 100%;
+                /* top: 120px; */
+                margin-top: 120px;
+                margin-bottom: 20px;
+            }
+
+            /* . .invoice-body {
+                position: absolute;
+                width: 100%;
+                top: 120px;
+            } */
+
+            .invoice-body-paginator{
+                margin-bottom: 2px;
+            }
+            .distribucion .paginator-separator {
+                height: 1px;
+                margin-top: 20px;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-body-info {
+                margin-top: 25px;
+                padding-bottom: 15px;
+                padding-left: 2%;
+                width: 97.8%;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-body-info div {
+                margin-top: 10px;
+                display: inline-block;
+                width: 49%;
+            }
+            .distribucion .invoice-product-info {
+                padding-bottom: 5px;
+                padding-left: 0%;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .distribucion .invoice-product-info th {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }   
+            /* .distribucion .invoice-product-info td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+            } */
+            .distribucion .invoice-product-info > tr {
+                background-color: white;
+                border: none;
+            }
+            .distribucion .invoice-product-info > tr:nth-child(even) {
+                background-color: #e1ffc1;
+                border: none;
+            }
+            .distribucion .border-right-none {
+                border-right: none !important;
+            }
+            .distribucion .border-left-none {
+                border-left: none !important;
+            }
+            .distribucion .underline {
+                border-bottom: 2px solid black;
+            }
+
+            .distribucion .invoice-total {
+                width: 100%;
+                align-self: flex-end;
+            }
+            /* .distribucion .invoice-total {
+                position: relative;
+            	top: 800px;
+                width: 100%;
+            } */
+            .distribucion .invoice-total table {
+            	margin-left: auto;
+            	margin-right: 0;
+            	/* margin-bottom: 5px; */
+                padding-bottom: 5px;
+                padding-left: 2%;
+                width: 80%;
+                border-collapse: collapse;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-total table th, .distribucion .invoice-total table td {
+                width: 20%;
+                text-align: center;
+                padding: 5px 0px;
+                border: solid 1px black;
+            }
+            .distribucion .invoice-total .invoice-first-table td {
+                vertical-align: top;
+                height: 20px;
+            }
+            .distribucion .invoice-total .invoice-first-table th {
+                background-color: #c6c6c6;
+            }
+            .distribucion .cell-10 {
+                width: 10% !important;
+            }
+            .distribucion .cell-14 {
+                width: 14% !important;
+            }
+            .distribucion .cell-8 {
+                width: 8% !important;
+            }
+            .distribucion .cell-none {
+                border: none !important;
+            }
+            .distribucion .padding-right {
+                padding-right: 5px;
+            }
+            .distribucion .padding-left {
+                padding-left: 5px;
+            }
+            .distribucion .invoice-payment-legal-text {
+                position: relative;
+                padding-top: 0px;
+                height: 20px;
+            }
+            .distribucion .invoice-payment-info-title {
+                background-color: #cccccc;
+                border: solid 1px black;
+                margin-bottom: 5px;
+                padding: 5px;
+                font-weight: 700;
+            }
+            .distribucion .invoice-payment-info {
+                display: flex;
+                width: 97.8%;
+                margin-top: 5px;
+                padding: 10px 3px 10px 10px;
+                border: solid 1px black;
+            }
+            .distribucion  .bank-options {
+                padding-top: 15px;
+                padding-left: 100px;
+                padding-bottom: 15px;
+                line-height: 1.6;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+
+    <apex:variable var="account" value="{!Opportunity.Account}" />
+    <apex:variable var="principal" value="{!Opportunity.Account.Parent}" />
+    <apex:variable var="totalIva" value="{!IF(ISBLANK(Opportunity.PercentIVA_Formula__c), 0, Opportunity.Amount * (Opportunity.PercentIVA_Formula__c / 100))}" />
+    <apex:variable var="totalAmount" value="{!Opportunity.Amount + totalIva}" />
+    <apex:variable var="storec" value="{!Opportunity.Store__c}" />
+
+    <!-- Cuenta Principal -->
+    <apex:outputPanel rendered="{!account.RecordType.Name == 'Cuenta Principal'}">
+        <body class="energia">
+            <!--HEADER-->
+            <div class="invoice-header">
+                <div class="float-L">
+                    <img id="theImage0" src="{!URLFOR($Resource.HafesaLogo)}" width="90" height="100"/>
+                </div>
+                <div class="float-R padding-right-big">
+                    <div class="text-left"><b><i>HAFESA ENERGIA S.L.U.</i></b></div>
+                    <div class="text-left"><b><i>Calle Estébanez Calderón, 3-5</i></b></div>
+                    <div class="text-left"><b><i>1ª Planta</i></b></div>
+                    <div class="text-left"><b><i>(28020) Madrid- Madrid</i></b></div>
+                    <div class="text-left"><b><i>Tel.: 91 783 94 10 - Fax: 91 783 94 1</i></b></div>
+                </div>
+            </div>
+
+            <!--MIDDLE-->
+            <div class="invoice-body">
+
+                <!--PAGINATOR-->
+                <div class="invoice-body-paginator">
+                    <span class="paginator-name float-L">
+                        <b>Proforma</b>
+                    </span>
+                    <span class="paginator-number float-R padding-right">
+                        <b><span class="pageNumber"></span></b>
+                    </span>
+                </div>
+                <div class="paginator-separator"></div>
+
+                <!--INVOICE INFO-->
+                <div class="invoice-body-info">
+                    <div>
+                        <b class="underline">Número de Proforma:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Opportunity.OpportunityNumber__c}
+                    </div>
+                    <div>
+                        <b class="underline">Fecha</b> 
+                        <apex:outputText value="{0, date, dd/MM/yyyy}">
+                            <apex:param value="{!Opportunity.CreatedDate}" /> 
+                        </apex:outputText>
+                    </div>
+                    <div>
+                        <br/><b class="underline">Razón Social</b><br/><br/>
+                        <apex:outputText value="{!account.Name}"/><br/>
+                        <apex:outputText value="{!account.BillingStreet}"/><br/>
+                        <apex:outputText value="{!account.BillingPostalCode}"/>&nbsp;
+                        <apex:outputText value="{!account.BillingCity}"/><br/>
+                        <apex:outputText value="{!IF(ISBLANK(account.BillingState), '', '(' & UPPER(LEFT(account.BillingState, 1)) & LOWER(MID(account.BillingState, 2, LEN(account.BillingState) - 1)) & ')')}" />&nbsp;
+                        <apex:outputText value="{!account.BillingCountry}"/>
+                    </div>
+                    <div>
+                    </div>
+                    <div>
+                        <b class="underline">CIF/NIF:</b> &nbsp;&nbsp;&nbsp;&nbsp;<b>{!account.CIF__c}</b>
+                    </div>
+                </div>
+
+                <!--PRODUCTS-->
+                <div>
+                    <table class="invoice-product-info">
+                        <tr>
+                            <th class="border-right-none cell-10">
+                                <span class="float-L padding-left">
+                                    Pedido
+                                </span>                 
+                            </th>
+                            <th>
+                                <span class="float-L padding-left">
+                                    Terminal
+                                </span>
+                            </th>
+                            <th class="border-left-none">
+                                <span class="float-L padding-left">
+                                    Descripción
+                                </span>
+                            </th>
+                            <th class="border-left-none">
+                                <span class="float-L padding-left">
+                                    Alias
+                                </span>
+                            </th>
+                            <th>
+                                <span class="float-R padding-right">
+                                    Cantidad
+                                </span>
+                            </th>
+                            <th class="cell-8">
+                                <span class="float-R padding-right">
+                                    PVP
+                                </span>
+                            </th>
+                            <th>
+                                <span class="float-R padding-right">
+                                    Total
+                                </span>
+                            </th>
+                        </tr>
+                        <apex:repeat value="{!Opportunity.OpportunityLineItems}" var="line" id="theRepeat0">
+                            <tr>
+                                <td class="border-right-none cell-10">
+                                    <span class="float-L padding-left">
+                                        {!line.OrderNumber__c}
+                                    </span>
+                                </td>
+                                <td style = "width: 30%;">
+                                    <span class="float-L padding-left">
+                                        {!almacen}
+                                    </span> 
+                                </td>
+                                <td class="border-left-none" style = "width: 30%;">
+                                    <span class="float-L padding-left text-left">
+                                        {!line.Product2.Name}
+                                    </span>
+                                </td>
+                                <td class="border-left-none">
+                                    <span class="float-L padding-left text-left">
+                                        {!line.Alias__c}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="float-R padding-right">
+                                        <apex:outputField value="{!line.Quantity}" />
+                                    </span>
+                                </td>
+                                <td class="cell-8">
+                                    <span class="float-R padding-right">
+                                        <apex:outputField value="{!line.UnitPrice}"/>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="float-R padding-right">
+                                        <apex:outputField value="{!line.TotalPrice}"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <apex:variable var="contador" value="{!contador + 1}" />
+                        </apex:repeat>
+
+                    </table>
+                </div>
+            </div>
+            <!--TOTAL-->
+            <div class="invoice-total" style="position: {!IF(contador > 9, 'relative', 'fixed')}; top: {!IF(contador > 9, '0', '720px')}; margin-top: {!IF(contador > 9, '10px', '0px')};">
+                <table class="invoice-first-table">
+                    <tr>
+                        <th>
+                            Base imponible
+                        </th>
+                        <th>
+                            IVA (
+                            <apex:outputText rendered="{!NOT(Opportunity.TaxRate__c == '7' || Opportunity.TaxRate__c == '11' || Opportunity.TaxRate__c == '12')}" 
+                                            value="{0, number, #0.00}">
+                                <apex:param value="{!Opportunity.PercentIVA_Formula__c}" />
+                            </apex:outputText>%)
+                        </th>
+                        <th>
+                            Total factura 
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <apex:outputField value="{!Opportunity.Amount}"/>
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <apex:outputText value="{0, number, #,##0.00}">€
+                                <apex:param value="{!IF(
+                                    Opportunity.Type_of_opportunity__c != 'Operador' && 
+                                    Opportunity.TaxRate__c != '7' && 
+                                    Opportunity.TaxRate__c != '11' && 
+                                    Opportunity.TaxRate__c != '12', 
+                                    totalIva, 
+                                    0
+                                )}" />
+                            </apex:outputText>
+                            <!-- <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!IF(
+                                    NOT(Opportunity.TaxRate__c == '7' || 
+                                    Opportunity.TaxRate__c == '11' || 
+                                    Opportunity.TaxRate__c == '12'), 
+                                    totalIva, 
+                                    0
+                                )}" />
+                            </apex:outputText> € -->
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!totalAmount}" />
+                            </apex:outputText> €
+                        </td>
+                    </tr>
+                </table>
+                
+                <!--CONDITIONAL LEGAL TEXT-->
+                <apex:outputPanel rendered="{!(Opportunity.Type_of_opportunity__c == 'Operador' || 
+                            (Opportunity.TaxRate__c == '7' || 
+                            Opportunity.TaxRate__c == '11' || 
+                            Opportunity.TaxRate__c == '12'))}" 
+                                layout="block" style="margin-top: -50px;">
+                    <div class="invoice-payment-legal-text">
+                        <b>En Régimen Suspensivo de II.EE conforme al Art.7 de la ley 38/1992 y Exento de IVA, Art.23-24 Ley 37/1992</b>
+                    </div>
+                </apex:outputPanel>
+
+                <!--PAYMENT INFO-->
+                <div class="invoice-payment-info-title">Condiciones de pago</div>
+                <div class="invoice-payment-info">  
+                    <span><b>Forma de pago: </b>
+                        <apex:outputField value="{!Opportunity.PaymentMethod__c}"/>
+                    </span>
+                    <span class="bank-options text-right">TRANSFERENCIA <b>IBERCAJA ES48 2085 8071 1703 3026 7611</b></span><br/>
+                    <span style="font-style: italic; font-size: 10px;">Por favor, al realizar la transferencia, asegúrese de incluir el número de proforma {!Opportunity.OpportunityNumber__c} en el concepto.</span>
+                </div>
+
+                <!--FOOTER INFO-->
+                <div class="invoice-footer">
+                    <div class="invoice-footer-info">
+                        De acuerdo con lo establecido en la Ley Orgánica 15/1999 de Protección de Datos de Carácter Personal, procedemos a informarles que los datos<br/>
+                        personales que UD/s nos facilite, serán tratados de forma mixta en nuestros ficheros con la finalidad de llevar a cabo la gestión interna del cliente. Todos o<br/>
+                        parte de los datos aportados serán comunicados a las administraciones públicas competentes. El titular consiente al envío de comunicaciones comerciales<br/>
+                        de nuestros servicios tanto por correo electrónico como ordinario; en cualquier momento el interesado podrá oponerse a dicho consentimiento<br/>
+                        manifestándolo por escrito. Asimismo, el titular de los datos se compromete a comunicar por escrito a HAFESA ENERGIA, SLU cualquier modificación que se<br/>
+                        produzca en los datos aportados. Los interesados podrán ejercitar sus derechos de acceso, rectificación, cancelación y oposición reconocidos en la LOPD,<br/>
+                        dirigiéndose a HAFESA ENERGIA, SLU en la siguiente dirección: Calle Estébanez Calderón, 3-5, Planta 1<br/>
+                    </div>
+                    <div class="invoice-last-footer">
+                        <b>HAFESA ENERGIA S.L.U. · CIF: B-18213173 · Registro Mercantil de Granada, Tomo 451, Folio 146, Hoja GR-2716, Inscripcion 10ª</b>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </apex:outputPanel>
+
+    <!-- Cuenta Dirección -->
+    <apex:outputPanel rendered="{!account.RecordType.Name == 'Cuenta Dirección'}">
+        <body class="distribucion">
+            
+            <div class="invoice-header">
+                <div class="float-L">
+                    <img id="theImage1" src="{!URLFOR($Resource.HafesaLogo)}" width="90" height="100"/>
+                </div>
+                <div class="float-R padding-right-big" style="font-size: 13px; margin-right: 35px;">
+                    <div class="text-left"><b><i>HAFESA ENERGIA S.L.U.</i></b></div>
+                    <div class="text-left"><b><i>Calle Estébanez Calderón, 3-5</i></b></div>
+                    <div class="text-left"><b><i>1ª Planta</i></b></div>
+                    <div class="text-left"><b><i>(28020) Madrid- Madrid</i></b></div>
+                    <div class="text-left"><b><i>Tel.: 91 783 94 10 - Fax: 91 783 94 1</i></b></div>
+                </div>
+            </div>
+    
+            <div class="invoice-body">
+                <div class="invoice-body-paginator">
+                    <span class="paginator-name float-L">
+                        <b>Proforma</b>
+                    </span>
+                    <span class="paginator-number float-R padding-right">
+                        <b><span class="pageNumber"></span></b>
+                    </span>
+                </div>
+                <div class="paginator-separator"></div>
+    
+                
+                <div class="invoice-body-info">
+                    <div>
+                        <b class="underline">Número de Proforma:</b>&nbsp;&nbsp;&nbsp;&nbsp;{!Opportunity.OpportunityNumber__c}
+                    </div>
+                    <div>
+                        <b class="underline">Fecha</b> 
+                        <apex:outputText value="{0, date, dd/MM/yyyy HH:mm}">
+                            <apex:param value="{!Opportunity.CreatedDate}" /> 
+                        </apex:outputText>
+                    </div>
+                    <div>
+                        <b class="underline">Dirección Entrega:</b>
+                    </div>
+                    <div>
+                        <b class="underline">Razón Social</b>
+                    </div>
+                    <div>
+                        <apex:outputText value="{!account.Name}"/><br/>
+                        <apex:outputText value="{!account.ShippingStreet}"/><br/>
+                        <apex:outputText value="{!account.ShippingPostalCode}"/>&nbsp;
+                        <apex:outputText value="{!account.ShippingCity}"/><br/>
+                        <apex:outputText value="{!IF(ISBLANK(account.ShippingState), '', '(' & UPPER(LEFT(account.ShippingState, 1)) & LOWER(MID(account.ShippingState, 2, LEN(account.ShippingState) - 1)) & ')')}" />&nbsp;
+                        <apex:outputText value="{!account.ShippingCountry}"/>
+                    </div>
+                    <div>
+                        <apex:outputText value="{!principal.Name}"/><br/>
+                        <apex:outputText value="{!principal.BillingStreet}"/><br/>
+                        <apex:outputText value="{!principal.BillingPostalCode}"/>&nbsp;
+                        <apex:outputText value="{!principal.BillingCity}"/><br/>
+                        <apex:outputText value="{!IF(ISBLANK(principal.BillingState), '', '(' & UPPER(LEFT(principal.BillingState, 1)) & LOWER(MID(principal.BillingState, 2, LEN(principal.BillingState) - 1)) & ')')}" />&nbsp;
+                        <apex:outputText value="{!principal.BillingCountry}"/>
+                    </div>
+                    <div></div>
+                    <div>
+                        <b class="underline">CIF/NIF:</b> {!principal.CIF__c}
+                    </div>
+                </div><br/>
+
+                <table class="invoice-product-info">
+                    <tr>
+                        <th class="border-right-none cell-10">
+                            <span class="float-L padding-left">
+                                Fecha
+                            </span>                 
+                        </th>
+                        <th>
+                            <span class="float-L padding-left">
+                                Terminal
+                            </span>
+                        </th>
+                        <th class="border-left-none">
+                            <span class="float-L padding-left">
+                                Descripción
+                            </span>
+                        </th>
+                        <th>
+                            <span class="float-R padding-right">
+                                Cantidad
+                            </span>
+                        </th>
+                        <th class="cell-8">
+                            <span class="float-R padding-right">
+                                PVP
+                            </span>
+                        </th>
+                        <th>
+                            <span class="float-R padding-right">
+                                Total
+                            </span>
+                        </th>
+                    </tr>
+                    <apex:repeat value="{!Opportunity.OpportunityLineItems}" var="line" id="theRepeat1">
+                        <tr>
+                            <td class="border-right-none cell-10">
+                                <span class="float-L padding-left">
+                                    <apex:outputText value="{0,date,yyyy-MM-dd}">
+                                        <apex:param value="{!Opportunity.CloseDate}" />
+                                    </apex:outputText>
+                                </span>
+                            </td>
+                            <td style="width: 30%;">
+                                <span class="float-L padding-left">
+                                    {!almacen}
+                                </span>
+                            </td>
+                            <td class="border-left-none" style="width: 30%;">
+                                <span class="float-L padding-left text-left">
+                                    {!line.Product2.Name}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="float-R padding-right">
+                                    <apex:outputField value="{!line.Quantity}" />
+                                </span>
+                            </td>
+                            <td class="cell-8">
+                                <span class="float-R padding-right">
+                                    <apex:outputField value="{!line.UnitPrice}"/>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="float-R padding-right" >
+                                    <apex:outputField value="{!line.TotalPrice}"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <apex:variable var="contador2" value="{!contador2 + 1}" />
+                    </apex:repeat>
+                </table>
+    
+            </div>
+            <div class="invoice-total" style="position: {!IF(contador2 > 20, 'relative', 'fixed')}; top: {!IF(contador2 > 20, '0', '720px')}; margin-top: {!IF(contador2 > 20, '10px', '0px')};">
+            <!-- <div class="invoice-total"> -->
+                <table class="invoice-first-table">
+                    <tr>
+                        <th>
+                            Base imponible
+                        </th>
+                        <th>
+                            IVA (
+                            <apex:outputText rendered="{!NOT(Opportunity.TaxRate__c == '7' || Opportunity.TaxRate__c == '11' || Opportunity.TaxRate__c == '12')}" 
+                                            value="{0, number, #0.00}">
+                                <apex:param value="{!Opportunity.PercentIVA_Formula__c}" />
+                            </apex:outputText>%)
+                        </th>
+                        <th>
+                            Total factura 
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <apex:outputField value="{!Opportunity.Amount}"/>
+                        </td>
+                        <td class="border-left-none cell-10">
+                            <!-- <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!IF(NOT(Opportunity.Type_of_opportunity__c == 'Operador' ||
+                                    NOT(Opportunity.TaxRate__c == '7' || 
+                                    Opportunity.TaxRate__c == '11' || 
+                                    Opportunity.TaxRate__c == '12')), 
+                                    totalIva, 
+                                    0
+                                )}" />
+                            </apex:outputText> € -->
+
+                            <apex:outputText value="{0, number, #,##0.00}">€
+                                <apex:param value="{!IF(
+                                    Opportunity.Type_of_opportunity__c != 'Operador' && 
+                                    Opportunity.TaxRate__c != '7' && 
+                                    Opportunity.TaxRate__c != '11' && 
+                                    Opportunity.TaxRate__c != '12', 
+                                    totalIva, 
+                                    0
+                                )}" />
+                            </apex:outputText>
+
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!totalAmount}" />
+                            </apex:outputText> €
+                        </td>
+                    </tr>
+                </table><br/>
+
+                <apex:outputPanel rendered="{!(Opportunity.Type_of_opportunity__c == 'Operador' || 
+                              (Opportunity.TaxRate__c == '7' || 
+                               Opportunity.TaxRate__c == '11' || 
+                               Opportunity.TaxRate__c == '12'))}" 
+                                layout="block" style="margin-top: 0px;">
+                    <div class="invoice-payment-legal-text">
+                        <b>En Régimen Suspensivo de II.EE conforme al Art.7 de la ley 38/1992 y Exento de IVA, Art.23-24 Ley 37/1992</b>
+                    </div>
+                </apex:outputPanel>
+
+
+                <div class="invoice-payment-info-title">Condiciones de pago</div>
+                <div class="invoice-payment-info">
+                    <span><b>Forma de pago:</b> Prepago</span>
+                    <span class="bank-options text-right">TRANSFERENCIA <b>IBERCAJA ES48 2085 8071 1703 3026 7611</b></span><br/>
+                    <span style="font-style: italic; font-size: 10px;">Por favor, al realizar la transferencia, asegúrese de incluir el número de proforma {!Opportunity.OpportunityNumber__c} en el concepto.</span>
+                </div><br/>
+
+                <!--FOOTER INFO-->
+                <div class="invoice-footer">
+                    <div class="invoice-footer-info" style="font-size: 9.5px;">
+                        De acuerdo con lo establecido en la Ley Orgánica 15/1999 de Protección de Datos de Carácter Personal, procedemos a informarles que los datos<br/>
+                        personales que UD/s nos facilite, serán tratados de forma mixta en nuestros ficheros con la finalidad de llevar a cabo la gestión interna del cliente. Todos o<br/>
+                        parte de los datos aportados serán comunicados a las administraciones públicas competentes. El titular consiente al envío de comunicaciones comerciales<br/>
+                        de nuestros servicios tanto por correo electrónico como ordinario; en cualquier momento el interesado podrá oponerse a dicho consentimiento<br/>
+                        manifestándolo por escrito. Asimismo, el titular de los datos se compromete a comunicar por escrito a HAFESA ENERGIA, SLU cualquier modificación que se<br/>
+                        produzca en los datos aportados. Los interesados podrán ejercitar sus derechos de acceso, rectificación, cancelación y oposición reconocidos en la LOPD,<br/>
+                        dirigiéndose a HAFESA ENERGIA, SLU en la siguiente dirección: Calle Estébanez Calderón, 3-5, Planta 1<br/>
+                    </div><br/>
+                    <div class="invoice-last-footer" style="font-size: 11px;">
+                        <b>HAFESA ENERGIA S.L.U. · CIF: B-18213173 · Registro Mercantil de Granada, Tomo 451, Folio 146, Hoja GR-2716, Inscripcion 10ª</b>
+                    </div>
+                </div>
+            </div>
+    
+        </body>
+    </apex:outputPanel> 
+</apex:page>

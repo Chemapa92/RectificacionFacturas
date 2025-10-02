@@ -1,0 +1,31 @@
+.slds-card {
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    background: #ffffff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.slds-is-relative {
+    position: relative;
+    height: 50px;
+}
+
+.slds-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.diagnosis-result {
+    background-color: #f3f2f2;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+}

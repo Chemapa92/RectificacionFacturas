@@ -1,0 +1,39 @@
+<template>
+    <div style="height: 200px;">
+        <lightning-datatable key-field="Id_Salesforce" data={recordsForTable} show-row-number-column row-number-offset={rowOffset}
+            columns={fieldColumns} draft-values={fldsItemValues} onsave={saveHandleAction} hide-checkbox-column
+            suppress-bottom-bar={renderButton} oncellchange={onCellChange} class="slds-max-medium-table_stacked" oncancel={handleCancel}>
+        </lightning-datatable>
+        
+
+
+
+    </div>
+    <template if:true={renderMessageEuLit}>
+        <p style="color:red">No se puede guardar una línea de pedido con €/l menor 0.5 ni superior a 3</p>
+    </template>
+    <template if:true={renderMessageTotal}>
+        <p style="color:red">La suma de todas las lineas de pedido del registro no puede superar los 35000 litros ni
+            ser menor a 1000 litros</p>
+    </template>
+    <footer class="slds-card__footer">
+        <div class="right">
+            <button class="slds-button slds-button_neutral flow-button__BACK" onclick={handlePrevious} name="previous">
+                Anterior
+            </button>
+            <template if:false={renderMessageEuLit}>
+                <template if:true={noModified}>
+                    <template if:false={renderMessageTotal} >
+                        <button class="slds-button slds-button_brand flow-button__FINISH" onclick={handleNext} name="next">
+                            Siguiente
+                        </button>
+                    </template>
+                </template>
+                
+            </template>
+            
+
+        </div>
+    </footer>
+    
+</template>

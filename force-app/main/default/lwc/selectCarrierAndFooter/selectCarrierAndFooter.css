@@ -1,0 +1,10 @@
+.index-front{
+    overflow: visible;
+}
+.error-text{
+	color: var(--lwc-colorTextError, #c23934);
+}
+
+.right{
+	float: right;
+}

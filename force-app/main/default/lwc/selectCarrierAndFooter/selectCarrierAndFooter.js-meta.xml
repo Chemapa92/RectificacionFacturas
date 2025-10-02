@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="urn:metadata.tooling.soap.sforce.com" fqn="searchComponent">
+    <apiVersion>53.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Carrier Selector with Footer</masterLabel>
+    <description>Carrier Selector with Footer</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="OBJECT" extends="SObject" label="Select a sObject" description="Select a sObject"/>
+            <property name="fields" type="String[]" label="Query Fields" description="Array of fields to query" role="inputOnly"/>
+            <property name="objName" type="String" label="Query From" description="API name of the object searched" role="inputOnly"/>
+            <property name="where" type="String" label="Query Where" description="Text to use as where condition" role="inputOnly"/>
+            <property name="iconName" type="String" label="Input Icon" description="Salesforce icon to show on field" role="inputOnly"/>
+            <property name="labelName" type="String" label="Input Label" description="Salesforce icon to show on field" role="inputOnly"/>
+            <property name="placeholder" type="String" label="Input Placeholder" description="Placeholder to show on input" role="inputOnly"/>
+            <property name="displayFields" type="String" label="Input Display Fields" description="Fields to display" role="inputOnly"/>
+            <property name="showLabel" type="Boolean" label="Input Show label" description="If needs to show label" role="inputOnly"/>
+            <property name="createRecord" type="Boolean" label="Input Create button" description="If can create record" role="inputOnly"/>
+            <property name="parentAPIName" type="String" label="Parent API Name" description="Parent API Name" role="inputOnly"/>
+            <property name="disabled" type="Boolean" label="Disabled" description="If the component is disabled" role="inputOnly"/>
+            <property name="valueId" type="String" label="Selected Id" description="Preselected Id" role="inputOnly"/>
+            <property name="valueName" type="String" label="Selected Name" description="Preselected Name" role="inputOnly"/>
+            <property name="required" type="Boolean" label="Is required?" description="If need a record to next step" role="inputOnly"/>
+            <property name="MainFlow" type="Boolean" label="mainFlow" description="Running from main Flow" role="inputOnly"/>
+            <property name="selectedRecord" type="{OBJECT}" label="Selected Record" description="Selected record on query" role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

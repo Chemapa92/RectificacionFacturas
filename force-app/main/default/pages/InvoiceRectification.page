@@ -1,0 +1,21 @@
+<apex:page controller="InvoiceRectificationControllerDebugPage" action="{!rectifyInvoice}">
+    <apex:pageMessages />
+    <div style="text-align: center; padding: 50px;">
+        <h2>Rectificando Factura...</h2>
+        <p>Por favor espere mientras se procesa la rectificación de la factura.</p>
+        <apex:outputText rendered="{!NOT(ISBLANK(errorMessage))}"
+                         style="color: red; font-weight: bold;">
+            <br/><br/>
+            Error: {!errorMessage}
+        </apex:outputText>
+        <apex:outputText rendered="{!NOT(ISBLANK(loadingMessage))}">
+            <br/><br/>
+            {!loadingMessage}
+        </apex:outputText>
+        <apex:outputText rendered="{!NOT(ISBLANK(successMessage))}"
+                         style="color: green; font-weight: bold;">
+            <br/><br/>
+            {!successMessage}
+        </apex:outputText>
+    </div>
+</apex:page>

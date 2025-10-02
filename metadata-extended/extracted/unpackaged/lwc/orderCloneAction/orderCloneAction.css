@@ -1,0 +1,36 @@
+.slds-p-around_medium {
+    padding: 1rem;
+}
+
+.slds-text-align_center {
+    text-align: center;
+}
+
+.slds-m-bottom_small {
+    margin-bottom: 0.5rem;
+}
+
+.slds-m-bottom_medium {
+    margin-bottom: 1rem;
+}
+
+.slds-button_full {
+    width: 100%;
+}
+
+.slds-is-relative {
+    position: relative;
+    height: 50px;
+}
+
+.slds-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilo para el ícono */
+.slds-icon-utility-copy {
+    color: #0176d3;
+}

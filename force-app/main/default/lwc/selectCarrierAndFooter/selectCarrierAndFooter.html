@@ -1,0 +1,40 @@
+<template>
+    <p class="slds-p-horizontal_small">
+        <c-search-component
+        fields={fields}
+        obj-name={objName}
+        where={where}
+        icon-name={iconName}
+        label-name={labelName}
+        placeholder={placeholder}
+        display-fields={displayFields}
+        show-label={showLabel}
+        create-record={createRecord}
+        parent-api-name={parentAPIName}
+        disabled={disabled}
+        value-id={valueId}
+        value-name={valueName}
+        required={required}
+        onlookup={handleLookup} >
+        </c-search-component>
+    </p>
+    <div class="slds-p-horizontal_small error-text slds-form-element__help" if:true={showError}>
+        <span>Necesitas seleccionar un transportista</span>
+    </div>
+    <div class="slds-m-bottom_x-large"></div>
+        
+
+    <template if:false={MainFlow}>
+        <footer class="slds-card__footer">
+            <div class="right">
+                <button class="slds-button slds-button_neutral flow-button__BACK" onclick={handlePrevious} name="previous">
+                    Previous
+                </button>
+                <button class="slds-button slds-button_brand flow-button__FINISH" onclick={handleNext} name="next">
+                    Next
+                </button>
+            </div>
+        </footer>
+    </template>
+    
+</template>

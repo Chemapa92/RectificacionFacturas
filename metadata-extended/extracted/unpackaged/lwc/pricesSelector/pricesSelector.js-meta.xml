@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="urn:metadata.tooling.soap.sforce.com" fqn="pricesSelector">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Price Selector</masterLabel>
+    <description>Price Selector</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="OBJECT" extends="SObject" label="Select a sObject" description="Select a sObject"/>
+            <property name="selProducts" type="String[]" label="Selected Products" description="Id from pricebook records from selected products."/>
+            <property name="newOrder" type="{OBJECT}" label="Order to create" description="Order to create when select prices"/>
+            <property name="TipoPedido" type="String" label="Select TipoPedido" description="Tipo de pedido"/>
+            <property name="Paymethod" type="String" label="Select Paymethod" description="Metodo de pago"/>
+            <property name="selAccountStore" type="String" label="Selected Store" description="Name of the store"/>
+            <property name="AccountId" type="String" label="AccountId" description="AccountId"/>
+            <property name="ShippingAddressId" type="String" label="Direccion de envio" description="Id de la direccion de envio"/>
+            <property name="CarrierId" type="String" label="Carrier" description="Id del Carrier"/>
+            <property name = "Pedido" label= "Pedido"  type = "{OBJECT[]}"/>
+            <property name = "cuentaPrincipal" label= "cuentaPrincipal"  type = "Boolean"/>
+            <property name = "CrearOrder" label= "Crear Order"  type = "Boolean"/>
+            <property name = "orderStartDate" label= "Order Start Date"  type = "DateTime"/>
+            <property name = "closeDate" label= "Close Date"  type = "DateTime"/>
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

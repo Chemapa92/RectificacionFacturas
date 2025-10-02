@@ -1,0 +1,36 @@
+<template>
+    <!--class="slds-max-medium-table_stacked"-->
+
+    <div class="productTable">
+        <lightning-datatable
+            class="slds-max-medium-table_stacked"
+            key-field="Id"
+            data={listProducts}
+            columns={columns}
+            selected-rows={preSelectedRows}>
+        </lightning-datatable>
+        
+        <div class="error-text slds-form-element__help" if:true={showError}>
+                <span>Necesitas seleccionar al menos un producto</span>
+        </div>
+
+        <div if:false={isLoaded} class="slds-is-relative">
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+    </div>
+
+    <footer class="slds-card__footer">
+        <div class="right">
+            <template if:false={fromLWC}>
+                <button class="slds-button slds-button_neutral flow-button__BACK" onclick={handlePrevious} name="previous">
+                    Previous
+                </button>
+            </template>
+            <button class="slds-button slds-button_brand flow-button__FINISH" onclick={handleNext} name="next">
+                Next
+            </button>
+        </div>
+    </footer>
+</template>

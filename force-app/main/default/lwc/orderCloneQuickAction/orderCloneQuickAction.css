@@ -1,0 +1,34 @@
+.slds-notify_alert {
+    border-left: 3px solid #1589ee;
+}
+
+.slds-list_dotted {
+    margin-left: 1rem;
+}
+
+.slds-list_dotted .slds-item {
+    margin-bottom: 0.25rem;
+}
+
+.slds-button_stretch {
+    width: 100%;
+}
+
+/* Estilo para el spinner centrado */
+.slds-is-relative {
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mejora visual para la información adicional */
+.slds-text-heading_small {
+    color: #181818;
+    font-weight: 600;
+}
+
+.slds-text-color_weak {
+    color: #706e6b;
+}

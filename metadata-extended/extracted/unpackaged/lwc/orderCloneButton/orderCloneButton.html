@@ -1,0 +1,50 @@
+<template>
+    <lightning-card title="Clonar Pedido" icon-name="utility:copy">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_regular slds-m-bottom_medium">
+                ¿Desea clonar este pedido incluyendo todas sus líneas de pedido?
+            </p>
+            
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Clonar Pedido" 
+                        onclick={handleCloneClick}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Diagnosticar Líneas" 
+                        onclick={handleDiagnoseClick}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </div>
+            
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-m-top_medium">
+                    <lightning-spinner alternative-text="Procesando..." size="small"></lightning-spinner>
+                </div>
+            </template>
+            
+            <template if:true={showDiagnosis}>
+                <div class="slds-m-top_medium">
+                    <lightning-card title="Resultado del Diagnóstico">
+                        <div class="slds-p-around_medium">
+                            <pre class="diagnosis-result">{diagnosisResult}</pre>
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Cerrar" 
+                                onclick={closeDiagnosis}
+                                class="slds-m-top_small">
+                            </lightning-button>
+                        </div>
+                    </lightning-card>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

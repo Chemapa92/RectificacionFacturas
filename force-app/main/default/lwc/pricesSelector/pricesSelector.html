@@ -1,0 +1,110 @@
+<template>
+    <!--class="slds-max-medium-table_stacked"-->
+<template if:true={viewPriceTable}>
+    <div class="priceTable" if:false={limitMessage} >    
+        <lightning-datatable
+                    class="slds-max-medium-table_stacked"
+                    key-field="Id"
+                    data={listInitialProducts}
+                    columns={columns}
+                    draft-values={listProducts}
+                    hide-checkbox-column
+                    suppress-bottom-bar={enableRowNumber}
+                    onkeyup={handleKeyUp}
+                    oncellchange={handleCellChange}>
+        </lightning-datatable>
+        <div class="error-text slds-form-element__help" if:true={showQuantityError}>
+                <span>Necesitas seleccionar un mínimo de 1.000 Litros y un máximo de 35.000 Litros por pedido</span>
+        </div>
+        <div class="error-text slds-form-element__help" if:true={showLimitMessage}>
+                <span>Un producto no puede ser inferior a 0,5 €/Litro ni superior a 3 €/Litro</span>
+        </div>
+
+        <div if:false={isLoaded} class="slds-is-relative">
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+    </div>
+
+    <div class="confirmTable slds-align_absolute-center slds-m-bottom_x-large slds-m-top_x-large" if:true={limitMessage} >
+        El pedido está por debajo del precio base, ¿estás seguro/a?
+    </div>
+
+    <footer class="slds-card__footer" if:true={limitMessage} >
+        <div class="right">
+            <button class="slds-button slds-button_neutral flow-button__BACK" onclick={handlePrevious} name="previous">
+                Previous
+            </button>
+            <button class="slds-button slds-button_brand flow-button__FINISH" disabled={isSaving} onclick={createOrderJS} name="next">
+                Confirm
+            </button>
+        </div>
+    </footer>
+    <footer class="slds-card__footer" if:false={limitMessage} >
+        <div class="right">
+            <button class="slds-button slds-button_neutral flow-button__BACK" onclick={handlePreviousScreenFlow} name="previous">
+                Previous
+            </button>
+            <button class="slds-button slds-button_brand flow-button__FINISH" disabled={canNotSave} onclick={handleNext} name="next">
+                Finish
+            </button>
+        </div>
+    </footer>
+</template>
+
+<template if:true={resumen}>
+    <lightning-datatable
+                    class="slds-max-medium-table_stacked"
+                    key-field="Id"
+                    data={ArrayPedidos}
+                    columns={columns2}
+                    hide-checkbox-column
+                    suppress-bottom-bar={enableRowNumber}
+                    onkeyup={handleKeyUp}
+                    oncellchange={handleCellChange}>
+        </lightning-datatable>
+
+        <footer class="slds-card__footer" if:false={limitMessage} >
+            <div>
+                <button class="slds-button slds-button_neutral" style="float: left;" onclick={Callmodal} name="AñadirPedido">
+                    Añadir Pedido
+                </button>
+            </div>
+                <div class="right">
+                    <button class="slds-button slds-button_neutral flow-button__BACK"  onclick={handlePreviousScreenFlow} name="previous">
+                        Previous
+                    </button>
+                    <button class="slds-button slds-button_brand flow-button__FINISH"  onclick={handleSaveListPedidos} name="next">
+                        Finish
+                    </button>
+                </div>
+        </footer>
+</template>
+
+<template if:true={nuevoPedido}>  
+    <div class="slds-modal slds-fade-in-open slds-backdrop">  
+      <div class="slds-modal__container">  
+        <div class="slds-modal__header">  
+          <lightning-button-icon icon-name="utility:close" alternative-text="Close this window" size="large"  
+            variant="bare-inverse" onclick={closeModal} class="slds-modal__close">  
+          </lightning-button-icon>  
+        </div>  
+        <div class="slds-modal__content slds-p-around_medium">  
+          <center><P>¿Está seguro que desea agregar un nuevo pedido?</P></center>  
+        </div>  
+        <div class="slds-modal__footer">  
+            <button class="slds-button slds-button_neutral" onclick={closeModalPreview} title="Cancel">Cancelar</button>
+            <button class="slds-button slds-button_neutral" onclick={BackToFlow} title="Continuar">Continuar</button>
+        </div>  
+      </div>  
+    </div>  
+  </template>  
+
+<template if:true={runFlow}>
+    <lightning-flow  flow-api-name='PRUEBAS_FLUJO_PRINCIPAL'
+        flow-input-variables={inputVariables}>
+    </lightning-flow>
+</template>
+
+</template>

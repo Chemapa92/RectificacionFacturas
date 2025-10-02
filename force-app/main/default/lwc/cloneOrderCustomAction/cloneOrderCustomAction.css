@@ -1,0 +1,9 @@
+/* Estilos específicos para la acción de clonar pedido */
+.slds-var-p-around_medium {
+    text-align: center;
+}
+
+p {
+    margin-top: 1rem;
+    color: #706e6b;
+}
